@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Account Settings | SecureVault{% endblock %}
+{% block content %}
+<div class="container" style="max-width:560px">
+  <h1 class="page-title">Account Settings</h1>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <h2 class="card-title">Profile</h2>
+    <div class="field-row">
+      <span class="field-label">Username</span>
+      <span class="field-value">{{ current_user.username }}</span>
+    </div>
+    <div class="field-row">
+      <span class="field-label">Email</span>
+      <span class="field-value">{{ current_user.email }}</span>
+    </div>
+    {% if current_user.last_login %}
+    <div class="field-row">
+      <span class="field-label">Last login</span>
+      <span class="field-value">{{ current_user.last_login.strftime('%Y-%m-%d %H:%M UTC') }}</span>
+    </div>
+    {% endif %}
+    <div class="field-row">
+      <span class="field-label">Member since</span>
+      <span class="field-value">{{ current_user.created_at.strftime('%Y-%m-%d') }}</span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.5rem">
+    <h2 class="card-title">Change Master Password</h2>
+    <p class="text-muted" style="font-size:.875rem;margin-bottom:1rem">
+      Changing your master password re-encrypts your vault key. All existing entries remain accessible.
+    </p>
+    <form method="post">
+      {{ form.hidden_tag() }}
+      <div class="field">
+        {{ form.current_password.label }}
+        {{ form.current_password(class="input") }}
+        {% for e in form.current_password.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      </div>
+      <div class="field">
+        {{ form.new_password.label }}
+        {{ form.new_password(class="input", id="new-pw") }}
+        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+        <p class="strength-label" id="strength-label"></p>
+        {% for e in form.new_password.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      </div>
+      <div class="field">
+        {{ form.confirm_password.label }}
+        {{ form.confirm_password(class="input") }}
+        {% for e in form.confirm_password.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      </div>
+      {{ form.submit(class="btn btn-primary") }}
+    </form>
+  </div>
+
+  <div class="card danger-zone">
+    <h2 class="card-title" style="color:var(--red)">Danger Zone</h2>
+    <p class="text-muted" style="font-size:.875rem;margin-bottom:1rem">
+      Permanently delete your account and all vault entries. This cannot be undone.
+    </p>
+    <form method="post" action="{{ url_for('auth.delete_account') }}"
+          onsubmit="return confirm('Type DELETE to confirm account deletion.\n\nThis will permanently erase all your vault entries.')">
+      <div class="field">
+        <label>Confirm with your master password</label>
+        <input type="password" name="password" class="input" required>
+      </div>
+      <button type="submit" class="btn btn-danger">Delete My Account</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
