@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }} entry — SecureVault{% endblock %}
+{% block content %}
+
+<div class="form-page">
+  <div class="form-page-header">
+    <h2>{{ mode }} entry</h2>
+    <p>All fields are encrypted before being saved to the database.</p>
+  </div>
+
+  <form method="post" autocomplete="off" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="form-section">
+      <div class="form-section-label">Identity</div>
+      <div class="field">
+        {{ form.title.label }}
+        {{ form.title(class="input", autofocus=true, placeholder="e.g. GitHub, Gmail, AWS…") }}
+        {% for e in form.title.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+      <div class="field">
+        {{ form.category.label }}
+        {{ form.category(class="input") }}
+        {% for e in form.category.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        {{ form.site_url.label }}
+        {{ form.site_url(class="input", placeholder="https://example.com") }}
+        {% for e in form.site_url.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-label">Credentials</div>
+      <div class="field">
+        {{ form.username.label }}
+        {{ form.username(class="input", placeholder="username or email") }}
+        {% for e in form.username.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <label for="secret-field">{{ form.secret.label.text }}</label>
+        <div class="input-group">
+          {{ form.secret(class="input", type="password", id="secret-field", placeholder="Paste or generate a password") }}
+          <button type="button" class="btn btn-sm" id="toggle-secret" style="flex-shrink:0;">Show</button>
+          <button type="button" class="btn btn-sm btn-primary" id="gen-pass" style="flex-shrink:0;white-space:nowrap;">Generate</button>
+          <button type="button" class="btn btn-sm" id="gen-pass-api" style="flex-shrink:0;white-space:nowrap;" title="Generate via server">&#8635;</button>
+        </div>
+        <div class="strength-bar" style="margin-top:.4rem;"><div class="strength-fill" id="strength-bar"></div></div>
+        <div class="strength-label" id="strength-label"></div>
+        {% for e in form.secret.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-label">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-3);font-size:.72rem;">(optional)</span></div>
+      {{ form.notes(class="input", rows=4, placeholder="Any extra info — recovery codes, hints, account details…") }}
+      {% for e in form.notes.errors %}<span class="err">{{ e }}</span>{% endfor %}
+    </div>
+
+    <div class="form-actions">
+      {{ form.submit(class="btn btn-primary") }}
+      <a class="btn" href="{{ url_for('vault.dashboard') }}">Cancel</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
