@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Create account — SecureVault{% endblock %}
+
+{% block body %}
+<div class="auth-wrap">
+<div class="auth-card" style="max-width:460px;">
+  <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;">
+    <div class="brand-icon" style="width:38px;height:38px;border-radius:10px;">
+      <svg viewBox="0 0 20 20" fill="currentColor" style="width:19px;height:19px;"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+    </div>
+    <div>
+      <h2 style="margin-bottom:0;font-size:1.25rem;">Create your vault</h2>
+      <p class="subtitle" style="margin-bottom:0;">Free, encrypted, private</p>
+    </div>
+  </div>
+
+  <form method="post" autocomplete="off" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+      <div class="field" style="margin-bottom:0;">
+        {{ form.username.label }}
+        {{ form.username(class="input", autofocus=true, placeholder="username") }}
+        {% for e in form.username.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        {{ form.email.label }}
+        {{ form.email(class="input", placeholder="you@email.com") }}
+        {% for e in form.email.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+    </div>
+
+    <div style="margin:1.25rem 0 0;">
+      <div class="field">
+        {{ form.password.label }}
+        {{ form.password(class="input", id="pw-meter-field", placeholder="Minimum 10 characters") }}
+        <div class="strength-bar"><div class="strength-fill" id="strength-bar"></div></div>
+        <div class="strength-label" id="strength-label"></div>
+        {% for e in form.password.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+      <div class="field">
+        {{ form.confirm.label }}
+        {{ form.confirm(class="input", placeholder="Repeat your master password") }}
+        {% for e in form.confirm.errors %}<span class="err">{{ e }}</span>{% endfor %}
+      </div>
+    </div>
+
+    {{ form.submit(class="btn btn-primary btn-full") }}
+  </form>
+
+  <div class="alt-link">
+    Already have an account? <a href="{{ url_for('auth.login') }}">Sign in</a>
+  </div>
+
+  <div style="margin-top:1.25rem;padding:.85rem 1rem;background:var(--accent-subtle);border:1px solid rgba(74,108,247,.15);border-radius:var(--radius-sm);">
+    <p style="font-size:.75rem;color:var(--text-2);line-height:1.65;">
+      ⚠️ <strong style="color:var(--text-1);">Choose your master password carefully.</strong>
+      It encrypts your entire vault. If you forget it, your data cannot be recovered — there is no reset.
+    </p>
+  </div>
+</div>
+</div>
+{% endblock %}
