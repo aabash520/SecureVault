@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Sign in — SecureVault{% endblock %}
+
+{% block body %}
+<div class="auth-wrap">
+<div class="auth-card">
+  <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;">
+    <div class="brand-icon" style="width:38px;height:38px;border-radius:10px;">
+      <svg viewBox="0 0 20 20" fill="currentColor" style="width:19px;height:19px;"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+    </div>
+    <div>
+      <h2 style="margin-bottom:0;font-size:1.25rem;">Welcome back</h2>
+      <p class="subtitle" style="margin-bottom:0;">Sign in to your vault</p>
+    </div>
+  </div>
+
+  <form method="post" autocomplete="off" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="field">
+      {{ form.username.label }}
+      {{ form.username(class="input", autofocus=true, placeholder="Enter your username") }}
+      {% for e in form.username.errors %}<span class="err">{{ e }}</span>{% endfor %}
+    </div>
+    <div class="field" style="margin-bottom:1.5rem;">
+      {{ form.password.label }}
+      {{ form.password(class="input", placeholder="Your master password") }}
+      {% for e in form.password.errors %}<span class="err">{{ e }}</span>{% endfor %}
+    </div>
+    {{ form.submit(class="btn btn-primary btn-full") }}
+  </form>
+
+  <div class="alt-link">
+    Don't have an account? <a href="{{ url_for('auth.register') }}">Create one</a>
+  </div>
+
+  <div style="margin-top:1.5rem;padding:1rem;background:var(--bg-01);border:1px solid var(--border);border-radius:var(--radius-sm);">
+    <p style="font-size:.75rem;color:var(--text-3);line-height:1.6;">
+      🔒 Your master password derives the encryption key for your vault. It is never stored or sent to the server.
+    </p>
+  </div>
+</div>
+</div>
+{% endblock %}
